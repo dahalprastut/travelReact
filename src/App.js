@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import "react-notifications/lib/notifications.css";
+import { NotificationContainer } from "react-notifications";
+import ProtectedRoute from "./helpers/authHelper";
+import Login from "./views/user/login";
+import SignUp from "./views/user/signup";
+import GlobalStyle from "./components/GlobalStyle";
+
+import HomeUser from "./views/user/homeuser";
+import AppIndex from "./views/app";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GlobalStyle />
+      <NotificationContainer />
+      <Switch>
+        <Route
+          path="/login"
+          render={props => <Login {...props} />}
+        />
+        <Route path="/signup">
+          <SignUp />
+        </Route>
+        <Route exact path="/">
+          <HomeUser />
+        </Route>
+
+        <ProtectedRoute
+          path="/app"
+          login={false}
+          component={AppIndex}
+        />
+
+        {/* <Route path="/unauthorized" ><Unauthorized/></Route> */}
+      </Switch>
     </div>
   );
 }
