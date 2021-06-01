@@ -10,3 +10,7 @@ export const dangerColor = "rgb(173, 4, 4)";
 // html variables
 export const center = "1130px";
 export const fontsize = "67.5%";
+
+// url
+
+export const baseUrl = "http://127.0.0.1:8000/";

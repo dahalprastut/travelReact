@@ -30,6 +30,6 @@ const AboutStyle = styled.div`
   padding: 4rem 0;
 
   p {
-    margin-top: 2rem;
+    margin-top: 1.8rem;
   }
 `;

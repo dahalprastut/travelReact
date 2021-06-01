@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import Navigation from "../../components/navigation";
 import Footer from "../../components/footer";
 import FormData from "../../containers/user/signupForm";
 import MainLeft from "../../containers/user/mainLeft";
+import { getUsers } from "./../../redux/actions";
 
-export default function SignUp() {
+function SignUp({
+  getUsersAction,
+  error,
+  loading,
+  users,
+}) {
+  useEffect(() => {
+    getUsersAction();
+  }, []);
   return (
     <div className="signupPage">
+      {console.log(users)}
       <Navigation />
       <SignupMainStyled>
         <MainLeft />
@@ -45,3 +56,12 @@ const SignupMainStyled = styled.div`
     padding-left: 10rem;
   }
 `;
+
+const mapStateToProps = ({ authReducer }) => {
+  const { error, loading, users } = authReducer;
+  return { error, loading, users };
+};
+
+export default connect(mapStateToProps, {
+  getUsersAction: getUsers,
+})(SignUp);
