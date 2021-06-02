@@ -3,6 +3,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { getCurrentUser } from "./utils";
 
 export default function ProtectedRoute({
   component: Component,
@@ -13,8 +14,9 @@ export default function ProtectedRoute({
     <Route
       {...rest}
       //   rest = path="/app"
+
       render={props => {
-        if (login === true) {
+        if (getCurrentUser().data.user) {
           return (
             <Component {...rest} {...props} />
           );

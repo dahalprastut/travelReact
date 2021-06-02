@@ -20,16 +20,17 @@ function App() {
           path="/login"
           render={props => <Login {...props} />}
         />
-        <Route path="/signup">
-          <SignUp />
-        </Route>
+        <Route
+          path="/signup"
+          render={props => <SignUp {...props} />}
+        />
+
         <Route exact path="/">
           <HomeUser />
         </Route>
 
         <ProtectedRoute
           path="/app"
-          login={false}
           component={AppIndex}
         />
 

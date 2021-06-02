@@ -5,12 +5,19 @@ import {
   put,
   takeEvery,
 } from "redux-saga/effects";
-import { GET_USERS } from "./../actions";
+import { GET_USERS, SIGN_UP } from "./../actions";
 import {
   getUsersSuccess,
   getUsersError,
+  signUpSuccess,
+  signUpError,
+  signUp,
 } from "./action";
-import { viewUsers } from "./../../data/api";
+import { setCurrentUser } from "./../../helpers/utils";
+import {
+  viewUsers,
+  register,
+} from "./../../data/api";
 
 export function* watchGetUser() {
   yield takeEvery(GET_USERS, getUsers);
@@ -31,6 +38,34 @@ function* getUsers() {
   }
 }
 
+export function* watchSignUpUser() {
+  yield takeEvery(SIGN_UP, signUpUser);
+}
+
+const signUpUserAsync = async body =>
+  register(body);
+
+function* signUpUser({ payload }) {
+  try {
+    const postedUser = yield call(
+      signUpUserAsync,
+      payload.data
+    );
+    if (!postedUser.message) {
+      setCurrentUser(postedUser);
+      payload.history.push("/app");
+      yield put(signUpSuccess(postedUser));
+    } else {
+      yield put(signUpError(postedUser.message));
+    }
+  } catch (err) {
+    yield put(signUpError(err));
+  }
+}
+
 export default function* rootSaga() {
-  yield all([fork(watchGetUser)]);
+  yield all([
+    fork(watchGetUser),
+    fork(watchSignUpUser),
+  ]);
 }

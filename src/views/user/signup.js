@@ -12,19 +12,19 @@ function SignUp({
   error,
   loading,
   users,
+  history,
 }) {
   useEffect(() => {
     getUsersAction();
   }, []);
   return (
     <div className="signupPage">
-      {console.log(users)}
       <Navigation />
       <SignupMainStyled>
         <MainLeft />
         <div className="login-main__right">
           <h2>SignUp</h2>
-          <FormData />
+          <FormData history={history} />
         </div>
       </SignupMainStyled>
       <Footer />

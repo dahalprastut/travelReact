@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
   Formik,
   Form,
@@ -8,17 +9,24 @@ import {
 import * as Yup from "yup";
 import styled from "styled-components";
 import { dangerColor } from "../../constants/variables";
+import { signUp } from "./../../redux/actions";
 
-export default function FormData() {
+function FormData({
+  signUpAction,
+  error,
+  loading,
+  currentUser,
+  history,
+}) {
   let initial = {
-    fullName: "",
+    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    passwordConfirm: "",
   };
 
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string()
+    name: Yup.string()
       .min(4, "Name is too short")
       .max(20, "Name is too long")
       .required("Required"),
@@ -29,7 +37,7 @@ export default function FormData() {
     password: Yup.string()
       .min(8)
       .required("Required"),
-    confirmPassword: Yup.string()
+    passwordConfirm: Yup.string()
       .oneOf(
         [Yup.ref("password"), null],
         "Password not matched"
@@ -42,6 +50,7 @@ export default function FormData() {
     { resetForm }
   ) => {
     // console.log(values);
+    signUpAction(values, history);
     resetForm();
   };
 
@@ -72,17 +81,17 @@ export default function FormData() {
           <DivStyle>
             <Field
               style={inputStyle}
-              name="fullName"
+              name="name"
               type="text"
               placeholder="Full Name"
             />
-            {errors.fullName &&
-            touched.fullName ? (
+            {errors.name && touched.name ? (
               <div style={errorStyle}>
-                {errors.fullName}
+                {errors.name}
               </div>
             ) : null}
           </DivStyle>
+
           <DivStyle>
             <Field
               style={inputStyle}
@@ -113,14 +122,14 @@ export default function FormData() {
           <DivStyle>
             <Field
               style={inputStyle}
-              name="confirmPassword"
+              name="passwordConfirm"
               type="password"
               placeholder="Confrim Password"
             />
-            {errors.confirmPassword &&
-              touched.confirmPassword && (
+            {errors.passwordConfirm &&
+              touched.passwordConfirm && (
                 <div style={errorStyle}>
-                  {errors.confirmPassword}
+                  {errors.passwordConfirm}
                 </div>
               )}
           </DivStyle>
@@ -142,3 +151,13 @@ const LabelStyle = styled.label`
   margin-right: 1rem;
   font-size: 1.6rem;
 `;
+
+const mapStateToProps = ({ authReducer }) => {
+  const { error, loading, currentUser } =
+    authReducer;
+  return { error, loading, currentUser };
+};
+
+export default connect(mapStateToProps, {
+  signUpAction: signUp,
+})(FormData);

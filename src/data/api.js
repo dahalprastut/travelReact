@@ -27,7 +27,19 @@ export const viewUsers = async () => {
       return res.data.data.users;
     })
     .catch(err => {
-      console.log(err);
+      console.log("error from catch api", err);
+      return err.message;
+    });
+};
+
+export const register = async params => {
+  return await base()
+    .post("/users/signup", params)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.log("error from catch api", err);
       return err.message;
     });
 };
